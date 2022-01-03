@@ -1,12 +1,32 @@
 <template>
-  <form @submit.prevent="submitData">
+  <form @submit.prevent="submitForm">
     <div class="form-control">
       <label for="user-name">Your Name</label>
-      <input id="user-name" name="user-name" type="text" v-model.trim="name" />
+      <input
+        id="user-name"
+        name="user-name"
+        type="text"
+        v-model.trim="name"
+        @blur="validateNameInput"
+        :placeholder="namePlaceholder"
+      />
     </div>
     <div class="form-control">
       <label for="age">Your Age (Years)</label>
-      <input id="age" name="age" type="number" v-model="age" />
+      <input
+        id="age"
+        name="age"
+        type="number"
+        min="1"
+        v-model="age"
+        @blur="validateAgeInput"
+        oninput="
+          (this.value =
+            !!this.value && Math.abs(this.value) >= 1
+              ? Math.abs(this.value)
+              : null)
+        "
+      />
     </div>
     <div class="form-control">
       <label for="referrer">How did you hear about us?</label>
@@ -82,6 +102,15 @@
         <label for="how-other">Other</label>
       </div>
     </div>
+    <div class="form-control">
+      <input
+        type="checkbox"
+        id="confirm-terms"
+        name="confirm-terms"
+        v-model="confirmTerms"
+      />
+      <label for="confirm-terms">Agree to terms of use?</label>
+    </div>
     <div>
       <button>Save Data</button>
     </div>
@@ -107,6 +136,9 @@
         <p>
           How do you learn? <span>{{ how }}</span>
         </p>
+        <p>
+          confirmTerms: <span>{{ confirmTerms }}</span>
+        </p>
       </div>
     </section>
   </form>
@@ -122,15 +154,24 @@ export default {
       referrer: 'google',
       interest: [],
       how: '',
+      confirmTerms: false,
+      validation: false,
+      namePlaceholder: '',
     };
   },
   methods: {
-    submitData() {
+    submitForm() {
       if (this.name) {
         this.id = new Date().toISOString();
       }
     },
+    validateNameInput() {
+      if (!this.name) {
+        this.namePlaceholder = 'Please enter a valid name!';
+      }
+    },
   },
+  //TODO: don't send http req
 };
 </script>
 
@@ -207,5 +248,18 @@ button:active {
 
 p span {
   color: yellow;
+}
+
+::placeholder {
+  color: rgba(255, 0, 0, 0.521);
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: rgba(255, 0, 0, 0.521);
+}
+
+::-ms-input-placeholder {
+  color: rgba(255, 0, 0, 0.521);
 }
 </style>
