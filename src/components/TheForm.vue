@@ -103,6 +103,9 @@
       </div>
     </div>
     <div class="form-control">
+      <rating-control v-model="rating"></rating-control>
+    </div>
+    <div class="form-control">
       <input
         type="checkbox"
         id="confirm-terms"
@@ -112,7 +115,7 @@
       <label for="confirm-terms">Agree to terms of use?</label>
     </div>
     <div>
-      <button>Save Data</button>
+      <p-button label="Submit" @click="submitForm" />
     </div>
     <section id="output">
       <div>
@@ -137,6 +140,9 @@
           How do you learn? <span>{{ how }}</span>
         </p>
         <p>
+          Rating: <span>{{ rating }}</span>
+        </p>
+        <p>
           confirmTerms: <span>{{ confirmTerms }}</span>
         </p>
       </div>
@@ -145,7 +151,12 @@
 </template>
 
 <script>
+import RatingControl from './RatingControl.vue';
+
 export default {
+  components: {
+    RatingControl,
+  },
   data() {
     return {
       id: '',
@@ -154,6 +165,7 @@ export default {
       referrer: 'google',
       interest: [],
       how: '',
+      rating: null,
       confirmTerms: false,
       validation: false,
       namePlaceholder: '',
@@ -222,7 +234,7 @@ input[type='radio'] + label {
   font-weight: normal;
 }
 
-button {
+/* button {
   font: inherit;
   border: 1px solid #0076bb;
   background-color: #0076bb;
@@ -236,7 +248,7 @@ button:hover,
 button:active {
   border-color: #002350;
   background-color: #002350;
-}
+} */
 
 #output {
   color: #ffffff;
